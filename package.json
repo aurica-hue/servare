@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": ["apps/*", "services/*"],
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@8",
   "scripts": {
     "build": "next build",
     "dev": "next dev",

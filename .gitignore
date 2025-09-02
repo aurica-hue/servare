@@ -29,4 +29,5 @@ next-env.d.ts
 # python virtualenvs
 .venv/
 venv/
-services/api/.venv/
+services/api/.venv/__pycache__/
+*.pyc
