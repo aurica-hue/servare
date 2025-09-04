@@ -3,14 +3,11 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: services/api
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
       - uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./services/api
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/servare-api:${{ github.sha }}
