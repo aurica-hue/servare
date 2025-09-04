@@ -1,4 +1,5 @@
 import { Badge } from "../ui/badge"
+// Force reload
 
 export const sections = [
   {

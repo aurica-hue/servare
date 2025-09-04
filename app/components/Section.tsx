@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import type { SectionProps } from "../types"
 
-export default function Section({ id, title, subtitle, content, isActive, showButton, buttonText }: SectionProps) {
+export default function Section({ id, title, subtitle, content, isActive, showButton, buttonText, customComponent }: SectionProps) {
   const router = useRouter()
+
 
   const handleButtonClick = () => {
     router.push("/contact")
@@ -57,6 +58,16 @@ export default function Section({ id, title, subtitle, content, isActive, showBu
           >
             {buttonText}
           </Button>
+        </motion.div>
+      )}
+      {customComponent && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isActive ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-8"
+        >
+          {customComponent}
         </motion.div>
       )}
     </section>
