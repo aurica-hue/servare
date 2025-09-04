@@ -1,8 +1,14 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from routes import health, waitlist
 
-app = FastAPI()
+app = FastAPI(title="Servare API")
 
-@app.get("/healthz")
-async def h(): 
-    return {"status":"ok"}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
+)
+
+app.include_router(health.router)
+app.include_router(waitlist.router)
 

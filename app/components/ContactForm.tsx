@@ -20,11 +20,28 @@ export function ContactForm() {
     additionalInfo: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
-    // Handle form submission here
-    alert("Thank you for joining our waitlist! We'll be in touch soon.")
+    
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      })
+
+      if (response.ok) {
+        alert("Thank you for joining our waitlist! We'll be in touch soon.")
+      } else if (response.status === 409) {
+        alert("This email is already on our waitlist.")
+      } else {
+        alert("Something went wrong. Please try again.")
+      }
+    } catch (error) {
+      console.error("Error joining waitlist:", error)
+      alert("Network error. Please check your connection and try again.")
+    }
   }
 
   const handleChange = (field: string, value: string) => {
