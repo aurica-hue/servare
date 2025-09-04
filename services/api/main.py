@@ -6,7 +6,9 @@ app = FastAPI(title="Servare API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
+    allow_origins=["https://<PROJECT>.vercel.app", "https://servare.ai"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(health.router)
