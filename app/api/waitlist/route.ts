@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // This will be your FastAPI backend URL when deployed
 // For local development, it points to your local FastAPI server
-   const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-production-7104.up.railway.app'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api-production-7104.up.railway.app'
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()

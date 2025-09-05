@@ -1,0 +1,12 @@
+nohup: ignoring input
+INFO:     Will watch for changes in these directories: ['/workspaces/servare/services/api']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [4930] using WatchFiles
+INFO:     Started server process [4946]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Environment variable status:
+SUPABASE_URL: EXISTS
+SUPABASE_ANON_KEY: EXISTS
+SUPABASE_SERVICE_ROLE_KEY: EXISTS
+INFO:     127.0.0.1:52732 - "GET /healthz HTTP/1.1" 200 OK
