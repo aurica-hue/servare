@@ -4,9 +4,16 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Solo Builders Community',
-  description: 'Accelerator platform for solo builders working on side projects',
-    generator: 'v0.app'
+  title: 'Servare AI – We Apply, You Interview',
+  description: 'Automated résumé tailoring & job applications.',
+  openGraph: {
+    title: 'Servare AI',
+    description: 'Automated résumé tailoring & job applications.',
+    images: ['/og-cover.png'],
+  },
+  alternates: {
+    canonical: 'https://servare.ai',
+  },
 }
 
 export default function RootLayout({
