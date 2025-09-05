@@ -10,12 +10,12 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
 
-# Debug: Print what Railway is actually providing
-print("Environment variables available:")
+# Debug: Check if variables exist (without exposing values)
+print("Environment variable status:")
 for key in ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"]:
-    value = os.environ.get(key, "NOT_FOUND")
-    print(f"{key}: {value[:20]}..." if len(value) > 20 else f"{key}: {value}")
+    exists = key in os.environ
+    print(f"{key}: {'EXISTS' if exists else 'MISSING'}")
 
-settings = Settings()             # Singleton import
+settings = Settings()
 
 settings = Settings()
