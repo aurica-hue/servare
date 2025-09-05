@@ -1,8 +1,14 @@
 {
   "name": "servare-dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/node:1": { "version": "20" },
     "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "containerEnv": {
+    "SUPABASE_URL": "https://agzvzdctnorcjpczfkkh.supabase.co",
+    "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnenZ6ZGN0bm9yY2pwY3pma2toIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4MzIwMzEsImV4cCI6MjA3MjQwODAzMX0.N-pPlJzgkeuT0s7NyNpXbd7yf_j6Bm-vLuMJMBO9CqU",
+    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnenZ6ZGN0bm9yY2pwY3pma2toIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjgzMjAzMSwiZXhwIjoyMDcyNDA4MDMxfQ.Z6eh4Qe7Y2VmAZHDtCvLD4oP8y5ITj8Qh_7MhMA6MJY"
   },
   "postCreateCommand": "corepack enable && pnpm install"
 }
