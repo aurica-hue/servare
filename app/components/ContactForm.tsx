@@ -189,9 +189,6 @@ export function ContactForm() {
             <SelectItem value="freelancer" className="text-white hover:bg-gray-800">
               Freelancer/Contractor
             </SelectItem>
-            <SelectItem value="career-change" className="text-white hover:bg-gray-800">
-              Looking to change careers
-            </SelectItem>
           </SelectContent>
         </Select>
       </div>

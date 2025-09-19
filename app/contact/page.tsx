@@ -5,7 +5,7 @@ export default function ContactPage() {
   console.log("[v0] ContactPage rendering")
 
   return (
-    <section className="relative min-h-screen overflow-hidden text-white">
+    <section className="relative min-h-screen overflow-hidden text-white instagram-browser-fix">
       {/* Background behind content */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <SquaresBackground />

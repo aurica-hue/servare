@@ -59,24 +59,6 @@ export default function LandingPage() {
 
   return (
     <Layout>
-      {/* Login Button */}
-      <motion.div
-        className="fixed top-6 right-6 z-40"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-white border-white hover:bg-white hover:text-black text-xs sm:text-sm"
-          onClick={() => router.push('/login')}
-        >
-          <LogIn className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-          <span className="hidden sm:inline">Login</span>
-          <span className="sm:hidden">Login</span>
-        </Button>
-      </motion.div>
 
       <nav className="fixed top-0 right-0 h-screen flex flex-col justify-center z-30 p-4">
         {sections.map((section, index) => (

@@ -116,6 +116,35 @@ export default function RootLayout({
                 document.head.appendChild(style);
                 
                 console.log('Instagram scroll logic fix applied - sections:', sections.length, 'height:', sectionHeight);
+                
+                // Fix contact form scrolling issue
+                fixInstagramContactForm();
+              }
+              
+              function fixInstagramContactForm() {
+                // Add CSS to ensure contact form works properly in Instagram
+                const contactStyle = document.createElement('style');
+                contactStyle.textContent = \`
+                  .instagram-browser .instagram-browser-fix {
+                    min-height: 100vh !important;
+                    height: auto !important;
+                    overflow-y: auto !important;
+                    -webkit-overflow-scrolling: touch !important;
+                  }
+                  
+                  .instagram-browser .instagram-browser-fix .container {
+                    padding-top: 2rem !important;
+                    padding-bottom: 2rem !important;
+                  }
+                  
+                  .instagram-browser .instagram-browser-fix .min-h-screen {
+                    min-height: auto !important;
+                    height: auto !important;
+                  }
+                \`;
+                document.head.appendChild(contactStyle);
+                
+                console.log('Instagram contact form fix applied');
               }
 
               // Run fixes when DOM is ready
