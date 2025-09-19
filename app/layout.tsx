@@ -29,7 +29,7 @@ export default function RootLayout({
         {children}
         <Analytics />
         
-        {/* Instagram Browser Compatibility Fix */}
+        {/* Instagram Browser Compatibility Fix - Karpathy Method */}
         <Script id="instagram-browser-fix" strategy="afterInteractive">
           {`
             (function() {
@@ -41,76 +41,81 @@ export default function RootLayout({
               // Apply Instagram-specific fixes
               function applyInstagramFixes() {
                 if (isInstagramBrowser()) {
-                  console.log('Instagram browser detected - fixing scroll snap issues');
+                  console.log('Instagram browser detected - applying Karpathy method fix');
                   
                   document.body.classList.add('instagram-browser');
                   
                   // Wait for page to load, then apply fixes
                   setTimeout(() => {
-                    fixInstagramScrollSnap();
-                  }, 500);
+                    fixInstagramScrollLogic();
+                  }, 1000);
                 }
               }
 
-              function fixInstagramScrollSnap() {
-                // Find the scroll container
+              function fixInstagramScrollLogic() {
                 const scrollContainer = document.querySelector('.h-full.overflow-y-auto');
                 if (!scrollContainer) return;
                 
-                // Force hardware acceleration
-                scrollContainer.style.webkitTransform = 'translateZ(0)';
-                scrollContainer.style.transform = 'translateZ(0)';
-                scrollContainer.style.webkitBackfaceVisibility = 'hidden';
-                scrollContainer.style.backfaceVisibility = 'hidden';
+                // Get all sections to calculate proper heights
+                const sections = scrollContainer.querySelectorAll('section');
+                if (sections.length === 0) return;
                 
-                // Override the scroll behavior for Instagram to ensure proper centering
+                // Calculate the actual height of each section in Instagram
+                const sectionHeight = scrollContainer.clientHeight;
+                console.log('Instagram section height:', sectionHeight);
+                
+                // Override the scroll event handler to use correct calculations
+                let isScrolling = false;
+                
+                const handleInstagramScroll = () => {
+                  if (isScrolling) return;
+                  
+                  const scrollTop = scrollContainer.scrollTop;
+                  const currentSection = Math.round(scrollTop / sectionHeight);
+                  
+                  // Dispatch custom event with correct section index
+                  const event = new CustomEvent('instagram-scroll-update', {
+                    detail: { activeSection: Math.max(0, Math.min(currentSection, sections.length - 1)) }
+                  });
+                  document.dispatchEvent(event);
+                };
+                
+                // Remove existing scroll listener and add our fixed one
+                scrollContainer.removeEventListener('scroll', handleInstagramScroll);
+                scrollContainer.addEventListener('scroll', handleInstagramScroll, { passive: true });
+                
+                // Override scrollTo to use correct section heights
                 const originalScrollTo = scrollContainer.scrollTo;
                 scrollContainer.scrollTo = function(options) {
                   if (typeof options === 'object' && options.behavior === 'smooth') {
-                    // For Instagram, use a custom smooth scroll that respects section boundaries
-                    const targetTop = options.top;
-                    const currentTop = this.scrollTop;
-                    const distance = targetTop - currentTop;
-                    const duration = 300; // ms
-                    const startTime = Date.now();
+                    // Calculate correct target position
+                    const sectionIndex = Math.round(options.top / window.innerHeight);
+                    const correctTop = sectionIndex * sectionHeight;
                     
-                    function animateScroll() {
-                      const elapsed = Date.now() - startTime;
-                      const progress = Math.min(elapsed / duration, 1);
-                      
-                      // Easing function for smooth animation
-                      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-                      
-                      this.scrollTop = currentTop + (distance * easeOutCubic);
-                      
-                      if (progress < 1) {
-                        requestAnimationFrame(animateScroll.bind(this));
-                      }
-                    }
-                    
-                    animateScroll.call(this);
+                    // Use instant scroll to avoid Instagram's broken smooth scrolling
+                    this.scrollTop = correctTop;
                   } else {
                     originalScrollTo.call(this, options);
                   }
                 };
                 
-                // Add CSS to ensure proper scrolling and centering
+                // Add CSS for proper scrolling
                 const style = document.createElement('style');
                 style.textContent = \`
                   .instagram-browser .h-full.overflow-y-auto {
                     -webkit-overflow-scrolling: touch !important;
-                    scroll-snap-type: y mandatory !important;
+                    scroll-snap-type: none !important;
                     scroll-behavior: auto !important;
                   }
                   
                   .instagram-browser section {
-                    scroll-snap-align: start !important;
-                    scroll-snap-stop: always !important;
+                    height: 100vh !important;
+                    scroll-snap-align: none !important;
                   }
                 \`;
                 document.head.appendChild(style);
                 
-                console.log('Instagram scroll snap fix applied with proper centering');
+                console.log('Instagram scroll logic fix applied - sections:', sections.length, 'height:', sectionHeight);
               }
 
               // Run fixes when DOM is ready
