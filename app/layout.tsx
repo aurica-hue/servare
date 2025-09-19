@@ -38,89 +38,43 @@ export default function RootLayout({
                 return navigator.userAgent.includes("Instagram");
               }
 
-              // Apply fixes when page loads
+              // Apply minimal fixes when page loads
               function applyInstagramFixes() {
                 if (isInstagramBrowser()) {
-                  // Add Instagram class to body
+                  console.log('Instagram browser detected - applying minimal fixes');
+                  
+                  // Add Instagram class to body for CSS targeting
                   document.body.classList.add('instagram-browser');
                   
-                  // Fix viewport height issues
-                  fixViewportHeight();
-                  
-                  // Fix section positioning
-                  fixSectionPositioning();
-                  
-                  // Add Instagram-specific styles
-                  addInstagramStyles();
+                  // Wait for content to load, then apply fixes
+                  setTimeout(() => {
+                    fixInstagramScrolling();
+                  }, 1000);
                 }
               }
 
-              function fixViewportHeight() {
-                // Get actual screen height
-                const screenHeight = window.screen.height;
-                const viewportHeight = window.innerHeight;
-                
-                // Use the more reliable height
-                const fixedHeight = Math.max(screenHeight, viewportHeight);
-                
-                // Apply to all sections
-                const sections = document.querySelectorAll('section, [class*="section"], [data-section]');
-                sections.forEach(section => {
-                  section.style.height = fixedHeight + 'px';
-                  section.style.minHeight = fixedHeight + 'px';
-                  section.style.maxHeight = fixedHeight + 'px';
-                });
-              }
-
-              function fixSectionPositioning() {
-                // Force hardware acceleration and fix positioning
-                const allElements = document.querySelectorAll('section, [class*="section"], div, h1, h2, h3, p');
-                allElements.forEach(element => {
-                  const style = element.style;
-                  style.webkitTransform = 'translate3d(0,0,0)';
-                  style.transform = 'translate3d(0,0,0)';
-                  style.webkitBackfaceVisibility = 'hidden';
-                  style.backfaceVisibility = 'hidden';
-                });
-              }
-
-              function addInstagramStyles() {
-                // Create and inject CSS to fix Instagram browser issues
+              function fixInstagramScrolling() {
+                // Only fix scrolling issues, don't mess with layout
                 const style = document.createElement('style');
                 style.textContent = \`
                   .instagram-browser {
-                    -webkit-text-size-adjust: 100% !important;
-                    text-size-adjust: 100% !important;
-                  }
-                  
-                  .instagram-browser section,
-                  .instagram-browser [class*="section"],
-                  .instagram-browser div {
-                    -webkit-transform: translate3d(0,0,0) !important;
-                    transform: translate3d(0,0,0) !important;
-                    -webkit-backface-visibility: hidden !important;
-                    backface-visibility: hidden !important;
-                    -webkit-text-size-adjust: none !important;
-                    text-size-adjust: none !important;
-                    position: relative !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    overflow-scrolling: touch !important;
                   }
                   
                   .instagram-browser * {
-                    -webkit-text-size-adjust: none !important;
-                    text-size-adjust: none !important;
-                  }
-                  
-                  .instagram-browser h1,
-                  .instagram-browser h2,
-                  .instagram-browser h3,
-                  .instagram-browser p {
-                    -webkit-transform: translate3d(0,0,0) !important;
-                    transform: translate3d(0,0,0) !important;
-                    -webkit-backface-visibility: hidden !important;
-                    backface-visibility: hidden !important;
+                    -webkit-transform: translateZ(0) !important;
+                    transform: translateZ(0) !important;
                   }
                 \`;
                 document.head.appendChild(style);
+                
+                // Force hardware acceleration on scroll container
+                const scrollContainer = document.querySelector('[data-scroll-container]') || document.body;
+                if (scrollContainer) {
+                  scrollContainer.style.webkitTransform = 'translateZ(0)';
+                  scrollContainer.style.transform = 'translateZ(0)';
+                }
               }
 
               // Run fixes when DOM is ready
@@ -129,13 +83,6 @@ export default function RootLayout({
               } else {
                 applyInstagramFixes();
               }
-
-              // Also run fixes on window resize
-              window.addEventListener('resize', function() {
-                if (isInstagramBrowser()) {
-                  setTimeout(fixViewportHeight, 100);
-                }
-              });
 
             })();
           `}
