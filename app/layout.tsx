@@ -38,43 +38,64 @@ export default function RootLayout({
                 return navigator.userAgent.includes("Instagram");
               }
 
-              // Apply minimal fixes when page loads
+              // Apply Instagram-specific fixes
               function applyInstagramFixes() {
                 if (isInstagramBrowser()) {
-                  console.log('Instagram browser detected - applying minimal fixes');
+                  console.log('Instagram browser detected - fixing scroll snap issues');
                   
-                  // Add Instagram class to body for CSS targeting
                   document.body.classList.add('instagram-browser');
                   
-                  // Wait for content to load, then apply fixes
+                  // Wait for page to load, then apply fixes
                   setTimeout(() => {
-                    fixInstagramScrolling();
-                  }, 1000);
+                    fixInstagramScrollSnap();
+                  }, 500);
                 }
               }
 
-              function fixInstagramScrolling() {
-                // Only fix scrolling issues, don't mess with layout
+              function fixInstagramScrollSnap() {
+                // Find the scroll container
+                const scrollContainer = document.querySelector('.h-full.overflow-y-auto');
+                if (!scrollContainer) return;
+                
+                // Remove problematic scroll snap for Instagram
+                scrollContainer.style.scrollSnapType = 'none';
+                
+                // Add smooth scrolling fallback
+                scrollContainer.style.scrollBehavior = 'smooth';
+                
+                // Force hardware acceleration
+                scrollContainer.style.webkitTransform = 'translateZ(0)';
+                scrollContainer.style.transform = 'translateZ(0)';
+                scrollContainer.style.webkitBackfaceVisibility = 'hidden';
+                scrollContainer.style.backfaceVisibility = 'hidden';
+                
+                // Override the scroll behavior for Instagram
+                const originalScrollTo = scrollContainer.scrollTo;
+                scrollContainer.scrollTo = function(options) {
+                  if (typeof options === 'object' && options.behavior === 'smooth') {
+                    // Use instant scroll for Instagram instead of smooth
+                    this.scrollTop = options.top;
+                  } else {
+                    originalScrollTo.call(this, options);
+                  }
+                };
+                
+                // Add CSS to ensure proper scrolling
                 const style = document.createElement('style');
                 style.textContent = \`
-                  .instagram-browser {
+                  .instagram-browser .h-full.overflow-y-auto {
                     -webkit-overflow-scrolling: touch !important;
-                    overflow-scrolling: touch !important;
+                    scroll-snap-type: none !important;
+                    scroll-behavior: auto !important;
                   }
                   
-                  .instagram-browser * {
-                    -webkit-transform: translateZ(0) !important;
-                    transform: translateZ(0) !important;
+                  .instagram-browser section {
+                    scroll-snap-align: none !important;
                   }
                 \`;
                 document.head.appendChild(style);
                 
-                // Force hardware acceleration on scroll container
-                const scrollContainer = document.querySelector('[data-scroll-container]') || document.body;
-                if (scrollContainer) {
-                  scrollContainer.style.webkitTransform = 'translateZ(0)';
-                  scrollContainer.style.transform = 'translateZ(0)';
-                }
+                console.log('Instagram scroll snap fix applied');
               }
 
               // Run fixes when DOM is ready
